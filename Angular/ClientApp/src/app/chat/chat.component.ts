@@ -1,5 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ChatService } from '../service/chat.service';
+import { Message } from '../Interfaces';
+import { Observable } from 'rxjs/internal/Observable';
 
 @Component({
   selector: 'chat-app',
@@ -7,17 +10,14 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class ChatComponent {
-  public lstMessages: string[];
+  public lstMessages: Observable<Message[]>;
 
-  constructor(http: HttpClient, @Inject("BASE_URL") baseUrl: string) {
-    http.get<Message[]>(baseUrl + "api/chat/message").subscribe(result => {
-      this.lstMessages = result;
-    }, error => console.error(error));
+  constructor(http: HttpClient, @Inject("BASE_URL") baseUrl: string,
+  protected chatService: ChatService) {
+    this.GetInfo();
+  }
+  public GetInfo() {
+    this.lstMessages = this.chatService.GetMessage();
   }
 }
 
-interface Message {
-  Id: number,
-  Name: string,
-  MessageContent: string;
-}

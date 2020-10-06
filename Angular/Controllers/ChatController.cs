@@ -23,6 +23,7 @@ namespace Angular.Controllers
         public IEnumerable<MessageViewModel> Message()
         {
             List<MessageViewModel> lst = (from m in db.Message
+                                          orderby m.Id descending   
                                          select new MessageViewModel
                                          {
                                              Id = m.Id,
